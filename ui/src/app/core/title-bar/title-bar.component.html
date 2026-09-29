@@ -1,0 +1,50 @@
+<header class="titlebar">
+    <div class="brand">My IDE</div>
+
+    <div class="status">
+        <span
+                class="dot"
+                [class.online]="coreReady">
+        </span>
+
+        {{ coreReady ? 'Ядро подключено' : 'Подключение...' }}
+    </div>
+
+    <div class="titlebar">
+        <div class="titlebar-drag">
+            DIS
+        </div>
+
+        <div class="titlebar-controls">
+            <button
+                    class="titlebar-button"
+                    (click)="minimize()">
+                −
+            </button>
+
+            <button
+                    class="titlebar-button"
+                    (click)="maximize()">
+                □
+            </button>
+
+            <button
+                    class="titlebar-button close"
+                    (click)="close()">
+                ×
+            </button>
+        </div>
+    </div>
+</header>
+
+<main>
+    <h1>Рабочее пространство</h1>
+
+    <p>Python Core: {{ coreStatus }}</p>
+    <p>Проект: {{ projectName }}</p>
+    <p>Рабочая директория: {{ workspace }}</p>
+
+    <button (click)="refresh()">
+        Обновить состояние
+    </button>
+</main>

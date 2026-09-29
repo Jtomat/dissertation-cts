@@ -1,0 +1,16 @@
+{
+  "name": "my-ide",
+  "private": true,
+  "scripts": {
+    "ui": "npm --prefix ui start",
+    "desktop": "npm --prefix desktop start",
+    "desktop:wait": "wait-on http://localhost:4300 && npm run desktop",
+    "dev": "concurrently -k \"npm run ui\" \"npm run desktop:wait\""
+  },
+  "devDependencies": {
+    "wait-on": "^9.4.0"
+  },
+  "dependencies": {
+    "concurrently": "^10.0.5"
+  }
+}
