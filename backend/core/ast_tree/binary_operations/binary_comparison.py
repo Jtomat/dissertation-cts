@@ -2,8 +2,6 @@ import operator
 from dataclasses import dataclass
 from enum import Enum
 from typing import Optional, ClassVar, Any, Dict
-
-import torch
 from torch import Tensor
 
 from core.ast_tree.ast_tree_factory import AstTreeFactory

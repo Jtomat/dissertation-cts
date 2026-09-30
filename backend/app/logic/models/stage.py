@@ -1,6 +1,6 @@
 from typing import List
 
-from core.logic.models.operation_node import OperationNode
+from app.logic.models.operation_node import OperationNode
 
 
 class Stage:

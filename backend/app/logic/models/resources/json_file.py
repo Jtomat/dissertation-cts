@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Dict, Any
 
-from core.logic.models.resources.resource import Resource
+from app.logic.models.resources.resource import Resource
 
 
 @dataclass

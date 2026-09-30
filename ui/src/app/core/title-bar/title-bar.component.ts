@@ -1,9 +1,11 @@
-import {Component, inject, OnInit} from '@angular/core';
-import {CoreApiService} from "@app/services/core-api.service";
-import {catchError} from "rxjs";
+import { Component, inject, OnInit } from '@angular/core';
+import { CoreApiService } from '@app/services/core-api.service';
+import { catchError } from 'rxjs';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-  imports: [],
+  imports: [MatIconModule, MatButtonModule],
   selector: 'app-title-bar',
   styleUrl: './title-bar.component.scss',
   templateUrl: './title-bar.component.html',
@@ -14,33 +16,38 @@ export class TitleBarComponent implements OnInit {
   projectName = '';
   workspace = '';
 
-  protected readonly coreApi = inject(CoreApiService)
+  protected readonly coreApi = inject(CoreApiService);
   ngOnInit() {
     this.refresh();
   }
 
-  minimize() {
-    window.desktop.window.minimize();
+  minimize(): void {
+    window.desktopAPI.minimize();
   }
 
-  maximize() {
-    window.desktop.window.maximize();
+  maximize(): void {
+    window.desktopAPI.maximize();
   }
 
-  close() {
-    window.desktop.window.close();
+  close(): void {
+    window.desktopAPI.close();
   }
 
-  refresh() {
-    this.coreApi.getState().pipe(catchError(e=> {
-      this.coreReady = false;
-      this.coreStatus = 'Недоступно';
-      return e;
-    })).subscribe((state) => {
-      this.coreReady = true;
-      this.coreStatus = state.core;
-      this.projectName = state.project;
-      this.workspace = state.workspace;
-    });
+  refresh(): void {
+    this.coreApi
+      .getState()
+      .pipe(
+        catchError((e) => {
+          this.coreReady = false;
+          this.coreStatus = 'Недоступно';
+          return e;
+        }),
+      )
+      .subscribe((state) => {
+        this.coreReady = true;
+        this.coreStatus = state.core;
+        this.projectName = state.project;
+        this.workspace = state.workspace;
+      });
   }
 }

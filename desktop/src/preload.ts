@@ -1,12 +1,12 @@
-import {
-    contextBridge,
-    ipcRenderer
-} from 'electron';
+import { contextBridge, ipcRenderer } from "electron";
 
-contextBridge.exposeInMainWorld('desktop', {
-    minimize: () => ipcRenderer.send('window:minimize'),
-    maximize: () => ipcRenderer.send('window:maximize'),
-    close: () => ipcRenderer.send('window:close'),
+contextBridge.exposeInMainWorld("desktopAPI", {
+    minimize: () => ipcRenderer.send("window:minimize"),
 
-    getCoreState: () => ipcRenderer.invoke('core:state')
+    maximize: () => ipcRenderer.send("window:maximize"),
+
+    close: () => ipcRenderer.send("window:close"),
+
+    getCoreInfo: () =>
+        ipcRenderer.invoke("core:get-info")
 });

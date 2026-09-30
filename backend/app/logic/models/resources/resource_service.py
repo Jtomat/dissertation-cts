@@ -1,7 +1,7 @@
 from pathlib import PurePath
 from typing import List
 
-from core.logic.models.resources.resource import Resource
+from app.logic.models.resources.resource import Resource
 
 
 class ResourceService:

@@ -1,15 +1,24 @@
 export interface DesktopAPI {
-    window: {
-        minimize(): void;
-        maximize(): void;
-        close(): void;
-    };
+
+    minimize(): void;
+
+    maximize(): void;
+
+    close(): void;
+
+    getCoreInfo(): Promise<{
+        id: string;
+        host: string;
+        port: number;
+    } | null>;
 }
 
 declare global {
     interface Window {
-        desktop: DesktopAPI;
+        desktopAPI: DesktopAPI;
     }
 }
+
+export {};
 
 export {};

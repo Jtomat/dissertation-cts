@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from typing import Optional, Dict, ClassVar, Any
-
-import torch
-from functorch.dim import Tensor
-from pydantic import ConfigDict
+from torch import Tensor
 
 from core.ast_tree.core.context import Context
 from core.ast_tree.core.expression import Expression

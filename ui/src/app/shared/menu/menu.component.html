@@ -1,0 +1,5 @@
+<button matButton [matMenuTriggerFor]="animals">Animal index</button>
+<mat-menu #animals="matMenu">
+    <button mat-menu-item [matMenuTriggerFor]="vertebrates">Vertebrates</button>
+    <button mat-menu-item [matMenuTriggerFor]="invertebrates">Invertebrates</button>
+</mat-menu>
