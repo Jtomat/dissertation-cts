@@ -3,6 +3,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "strictNullChecks": false,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
@@ -14,6 +15,7 @@
     "target": "ES2022",
     "module": "preserve",
     "useDefineForClassFields": false,
+    "strictPropertyInitialization": false,
     "paths": {
       "@app/*": ["./src/app/*"],
       "@env/*": ["./src/environments/*"],

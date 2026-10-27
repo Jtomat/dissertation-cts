@@ -1,0 +1,26 @@
+<svg
+        xmlns="http://www.w3.org/2000/svg"
+        style="position:absolute;width:0;height:0;overflow:hidden"
+        aria-hidden="true"
+>
+    <symbol id="f-x" viewBox="0 0 24 24" fill="none">
+        <path
+                d="M6 20L9.2 6.8C9.7 4.8 10.9 4 13 4H16"
+                stroke="currentColor"
+                stroke-width="2.2"
+                stroke-linecap="round"
+        />
+        <path
+                d="M5.5 11H13"
+                stroke="currentColor"
+                stroke-width="2.2"
+                stroke-linecap="round"
+        />
+        <path
+                d="M14 13L19.5 19M19.5 13L14 19"
+                stroke="currentColor"
+                stroke-width="2.2"
+                stroke-linecap="round"
+        />
+    </symbol>
+</svg>

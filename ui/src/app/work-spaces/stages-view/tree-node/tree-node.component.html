@@ -1,0 +1,32 @@
+<div
+        class="process-node"
+        [class.process-node--computed]="status === TreeStatus.Computed"
+        [class.process-node--changed]="status === TreeStatus.Changed"
+        [class.process-node--error]="status === TreeStatus.Error"
+        [class.process-node--processing]="status === TreeStatus.Processing"
+        [class.process-node--group]="isGroup"
+        [class.process-node--item]="!isGroup"
+>
+
+    <!-- Prefix: этап группы -->
+    @if (isGroup && groupIcon()) {
+        <i
+                class="process-node__prefix"
+                [class]="groupIcon()">
+        </i>
+    }
+
+    <!-- Название -->
+    <span class="process-node__title">
+        {{ nodeWrapper.data.title }}
+      </span>
+
+    <!-- Postfix: статус / результат -->
+    @if (postfixIcon) {
+        <i
+                class="process-node__postfix"
+                [class]="postfixIcon">
+        </i>
+    }
+
+</div>

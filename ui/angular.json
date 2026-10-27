@@ -24,7 +24,8 @@
                 "input": "public"
               }
             ],
-            "styles": [ "node_modules/material-icons/iconfont/material-icons.css", "src/styles/styles.scss"]
+            "styles": [ "node_modules/material-icons/iconfont/material-icons.css", "src/styles/styles.scss"],
+            "externalDependencies": ["assets/*"]
           },
           "configurations": {
             "production": {
@@ -46,7 +47,7 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
-            }
+            },
           },
           "defaultConfiguration": "production"
         },

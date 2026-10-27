@@ -13,3 +13,9 @@ class Declaration(Node):
 
     def eval(self, context: Context) -> None:
         context.set_declaration(self)
+
+    def to_json(self):
+        return {
+            "name": self.name,
+            "value": self.value.to_json(),
+        }

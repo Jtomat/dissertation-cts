@@ -1,0 +1,48 @@
+@if (isOpenedItem()) {
+    <app-context-menu
+            [items]="lastOpen()!.children"
+            [context]="context()"
+            [alignment]="alignment()"
+            [anchorElement]="submenuAnchor()"
+            [boundary]="boundary()"
+            [placement]="MenuPlacement.Submenu"
+    />
+}
+
+@for (item of items(); track item.action; let i = $index) {
+    @if (i > 0 && item.group !== items()[i - 1].group) {
+        <mat-divider />
+    }
+
+    @if (isGroupMenuItem(item); as group) {
+        <button
+                mat-menu-item
+                type="button"
+                class="menu-btn"
+                [class.active]="isActive(item)"
+                (click)="openSubMenu(group, $event)"
+        >
+            @if (group.icon) {
+                <mat-icon>{{ group.icon }}</mat-icon>
+            }
+
+            <span>{{ group.text }}</span>
+
+            <span class="submenu-indicator">›</span>
+        </button>
+    } @else {
+        <button
+                mat-menu-item
+                type="button"
+                class="menu-btn"
+                [class.active]="isActive(item)"
+                (click)="execute(item)"
+        >
+            @if (item.icon) {
+                <mat-icon>{{ item.icon }}</mat-icon>
+            }
+
+            <span>{{ item.text }}</span>
+        </button>
+    }
+}

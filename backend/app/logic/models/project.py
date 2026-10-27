@@ -1,16 +1,26 @@
+from dataclasses import dataclass
 from pathlib import Path
-from typing import List, Any
+from typing import List, Optional
 
 from app.logic.models.resources.resource import Resource
 from app.logic.models.stage import Stage
 
-
+@dataclass
 class Project:
-    id: str
+    uuid: str
     name: str
-    path: Path
     description: str
+    path: Path
 
-    stages: List[Stage]
-    resources: List[Resource]
-    globals: Any
+    stages: Optional[List[Stage]]
+
+    resources: Optional[List[Resource]]
+
+    globals: Optional[Stage]
+
+    def to_json(self):
+        return {
+            "uuid": self.uuid,
+            "name": self.name,
+            "description": self.description,
+        }

@@ -1,3 +1,7 @@
-<button matIconButton>
-    <mat-icon>code_blocks</mat-icon>
+<button matIconButton [class.active]="isActive('stages')" (click)="reroute('stages')">
+    <mat-icon>schema</mat-icon>
+</button>
+
+<button matIconButton [class.active]="isActive('globals')" (click)="reroute('globals')">
+    <mat-icon>language</mat-icon>
 </button>

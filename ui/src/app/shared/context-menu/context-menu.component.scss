@@ -1,0 +1,58 @@
+@use "sass:color";
+
+:host {
+  display: block;
+  position: fixed;
+  z-index: 10000;
+  box-sizing: border-box;
+
+  min-width: 120px;
+  max-width: calc(100vw - 8px);
+  max-height: calc(100vh - 8px);
+  overflow: auto;
+
+  padding: 0.3rem;
+
+  background: var(--mat-sys-surface-bright);
+  border: 1px solid var(--mat-sys-outline);
+
+  border-radius: 5px;
+
+  visibility: hidden;
+
+  .menu-btn {
+    &.active {
+      background-color: var(--mat-menu-item-hover-state-layer-color,
+              color-mix(in srgb, var(--mat-sys-on-surface)
+              calc(var(--mat-sys-hover-state-layer-opacity) * 100%), transparent));
+    }
+  }
+
+  ::ng-deep {
+    .mat-mdc-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      min-height: unset;
+      min-width: 120px;
+      box-sizing: border-box;
+
+      margin-block: 0.2rem;
+      padding-block: 0.3rem;
+
+      border-radius: 5px;
+      font-size: 0.8rem;
+    }
+
+    .mat-mdc-menu-item .mat-icon {
+      flex-shrink: 0;
+    }
+  }
+}
+
+.submenu-indicator {
+  margin-inline-start: auto;
+  padding-inline-start: 0.5rem;
+  font-size: 1.1rem;
+}

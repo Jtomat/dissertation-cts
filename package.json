@@ -11,6 +11,7 @@
     "wait-on": "^9.4.0"
   },
   "dependencies": {
-    "concurrently": "^10.0.5"
+    "concurrently": "^10.0.5",
+    "zone.js": "^0.16.3"
   }
 }

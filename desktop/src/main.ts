@@ -1,18 +1,10 @@
-import {
-    app,
-    BrowserWindow,
-    ipcMain
-} from "electron";
+import {app, BrowserWindow, ipcMain} from "electron";
 
 import path from "node:path";
 import net from "node:net";
-import {
-    spawn,
-    ChildProcess,
-    execFileSync
-} from "node:child_process";
+import {ChildProcess, execFileSync, spawn} from "node:child_process";
 
-import { CoreManager } from "./core-manager";
+import {CoreManager} from "./core-manager";
 
 let mainWindow: BrowserWindow | null = null;
 let angularProcess: ChildProcess | null = null;
@@ -37,12 +29,6 @@ interface InstanceInfo {
 }
 
 let instanceInfo: InstanceInfo | null = null;
-
-/**
- * ============================
- * Ports
- * ============================
- */
 
 async function findFreePort(): Promise<number> {
     return new Promise((resolve, reject) => {
@@ -71,13 +57,6 @@ async function findFreePort(): Promise<number> {
         });
     });
 }
-
-/**
- * ============================
- * Angular
- * ============================
- */
-
 async function startAngular(): Promise<number> {
     const uiPort = await findFreePort();
 
@@ -86,17 +65,25 @@ async function startAngular(): Promise<number> {
         "../../ui"
     );
 
+    const angularCli = path.join(
+        uiPath,
+        "node_modules",
+        "@angular",
+        "cli",
+        "bin",
+        "ng.js"
+    );
+
     console.log("Starting Angular...");
     console.log("Angular path:", uiPath);
+    console.log("Angular CLI:", angularCli);
     console.log("Angular port:", uiPort);
 
     angularProcess = spawn(
-        "npm",
+        "node",
         [
-            "--prefix",
-            uiPath,
-            "start",
-            "--",
+            angularCli,
+            "serve",
             "--host",
             "127.0.0.1",
             "--port",
@@ -104,7 +91,7 @@ async function startAngular(): Promise<number> {
         ],
         {
             cwd: uiPath,
-            shell: true,
+            shell: false,
             windowsHide: true,
             stdio: [
                 "ignore",
@@ -119,46 +106,25 @@ async function startAngular(): Promise<number> {
         angularProcess.pid
     );
 
-    angularProcess.stdout?.on(
-        "data",
-        (data: Buffer) => {
-            console.log(
-                "[ANGULAR]",
-                data.toString().trim()
-            );
-        }
-    );
+    angularProcess.stdout?.on("data", (data: Buffer) => {
+        console.log("[ANGULAR]", data.toString().trim());
+    });
 
-    angularProcess.stderr?.on(
-        "data",
-        (data: Buffer) => {
-            console.error(
-                "[ANGULAR ERROR]",
-                data.toString().trim()
-            );
-        }
-    );
+    angularProcess.stderr?.on("data", (data: Buffer) => {
+        console.error("[ANGULAR ERROR]", data.toString().trim());
+    });
 
-    angularProcess.on(
-        "error",
-        (error) => {
-            console.error(
-                "Angular process error:",
-                error
-            );
-        }
-    );
+    angularProcess.on("error", (error) => {
+        console.error("Angular process error:", error);
+    });
 
-    angularProcess.on(
-        "exit",
-        (code, signal) => {
-            console.log(
-                `Angular exited. code=${code}, signal=${signal}`
-            );
+    angularProcess.on("exit", (code, signal) => {
+        console.log(
+            `Angular exited. code=${code}, signal=${signal}`
+        );
 
-            angularProcess = null;
-        }
-    );
+        angularProcess = null;
+    });
 
     await waitForAngular(uiPort);
 
@@ -259,79 +225,81 @@ function killProcessTree(
 }
 
 function stopAngular(): void {
-    const process = angularProcess;
+    const child = angularProcess;
+
+    if (!child) {
+        return;
+    }
+
+    console.log(
+        "Stopping Angular PID:",
+        child.pid
+    );
+
+    if (process.platform === "win32") {
+        killProcessTree(child, "Angular");
+    } else {
+        child.kill("SIGTERM");
+    }
 
     angularProcess = null;
-
-    killProcessTree(
-        process,
-        "Angular"
-    );
 }
 
-/**
- * ============================
- * Window
- * ============================
- */
-
-function createWindow(
-    uiPort: number
-): void {
-    mainWindow = new BrowserWindow({
+function createWindow(uiPort: number): void {
+    const window = new BrowserWindow({
         width: 1400,
         height: 900,
         frame: false,
-
         webPreferences: {
-            preload: path.join(
-                __dirname,
-                "preload.js"
-            ),
+            preload: path.join(__dirname, "preload.js"),
             contextIsolation: true,
             nodeIntegration: false,
             sandbox: false
         }
     });
 
-    const uiUrl =
-        `http://127.0.0.1:${uiPort}`;
+    mainWindow = window;
 
-    console.log(
-        "Loading Angular:",
-        uiUrl
-    );
+    const uiUrl = `http://127.0.0.1:${uiPort}`;
 
-    /*
-     * Не await.
-     *
-     * BrowserWindow не должен блокировать
-     * lifecycle Electron.
-     */
-    void mainWindow
-        .loadURL(uiUrl)
-        .catch((error) => {
-            if (!isStopping) {
-                console.error(
-                    "Failed to load Angular:",
-                    error
-                );
-            }
+    console.log("Loading Angular:", uiUrl);
+
+    window.webContents.on("did-fail-load", (
+        event,
+        errorCode,
+        errorDescription,
+        validatedURL
+    ) => {
+        if (isStopping) {
+            return;
+        }
+
+        if (errorCode === -3) {
+            return;
+        }
+
+        console.error("Angular load failed:", {
+            errorCode,
+            errorDescription,
+            validatedURL
         });
+    });
 
-    mainWindow.on(
-        "closed",
-        () => {
+    window.loadURL(uiUrl).catch((error) => {
+        if (isStopping || window.isDestroyed()) {
+            return;
+        }
+
+        console.error("Failed to load Angular:", error);
+    });
+
+    window.on("closed", () => {
+        if (mainWindow === window) {
             mainWindow = null;
         }
-    );
+    });
 }
 
-/**
- * ============================
- * Instance
- * ============================
- */
 
 async function startInstance(): Promise<void> {
     if (isStarting) {
@@ -415,11 +383,6 @@ async function startInstance(): Promise<void> {
     }
 }
 
-/**
- * ============================
- * Shutdown
- * ============================
- */
 
 function stopInstance(): void {
     if (isStopping) {
@@ -465,11 +428,6 @@ function stopInstance(): void {
     );
 }
 
-/**
- * ============================
- * Helpers
- * ============================
- */
 
 function delay(
     ms: number
@@ -484,11 +442,6 @@ function delay(
     );
 }
 
-/**
- * ============================
- * IPC
- * ============================
- */
 
 ipcMain.on(
     "window:minimize",
@@ -537,12 +490,6 @@ ipcMain.handle(
     }
 );
 
-/**
- * ============================
- * Electron lifecycle
- * ============================
- */
-
 app.whenReady().then(
     async () => {
         try {
@@ -581,3 +528,42 @@ app.on(
         app.quit();
     }
 );
+
+process.on("SIGINT", () => {
+    console.log("Received SIGINT");
+
+    app.quit();
+});
+
+process.on("SIGTERM", () => {
+    console.log("Received SIGTERM");
+
+    app.quit();
+});
+
+process.on("exit", () => {
+    console.log("Electron process exiting...");
+
+    if (
+        process.platform === "win32" &&
+        angularProcess?.pid
+    ) {
+        try {
+            execFileSync(
+                "taskkill",
+                [
+                    "/PID",
+                    String(angularProcess.pid),
+                    "/T",
+                    "/F"
+                ],
+                {
+                    windowsHide: true,
+                    stdio: "ignore"
+                }
+            );
+        } catch {
+            // Процесс уже завершён.
+        }
+    }
+});

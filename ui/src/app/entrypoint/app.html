@@ -1,0 +1,17 @@
+<app-title-bar />
+
+<as-split context-menu-boundary gutterSize="1" direction="vertical">
+    <as-split-area>
+        <div class="central-aria">
+            <app-navbar-panel />
+            <div class="work-space">
+                <router-outlet />
+            </div>
+        </div>
+
+    </as-split-area>
+    <as-split-area >
+        <app-output-bar  />
+    </as-split-area>
+</as-split>
+

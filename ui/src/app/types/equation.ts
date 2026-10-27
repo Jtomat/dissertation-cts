@@ -4,7 +4,7 @@ export interface Node {
 
 export interface Declaration extends Node {
     name: string;
-    value: Expression;
+    value?: Expression;
 }
 
 export interface FunctionDeclaration extends Declaration {
@@ -20,12 +20,6 @@ export interface Expression extends Node {
 
 }
 
-// export interface ExNode {
-//     id: string
-//     name: string
-//     description: string
-//     declaration: Declaration
-// }
 
 export interface FunctionCall extends Expression {
     type: 'function_call';

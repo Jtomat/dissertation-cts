@@ -1,0 +1,62 @@
+:host {
+  display: block;
+  min-width: 0;
+
+  .process-node__prefix {
+    flex-shrink: 0;
+    color: var(--tree-group-icon-color, #64748b);
+  }
+
+  .process-node__postfix {
+    flex-shrink: 0;
+    margin-left: auto;
+  }
+
+  /* Computed */
+  .process-node--computed {
+    background: rgba(34, 197, 94, 0.09);
+    color: #15803d;
+  }
+
+  .process-node--computed .process-node__postfix {
+    color: #16a34a;
+  }
+
+  /* Changed */
+  .process-node--changed {
+    background: rgba(234, 179, 8, 0.12);
+    color: #a16207;
+  }
+
+  .process-node--changed .process-node__postfix {
+    color: #ca8a04;
+  }
+
+  /* Error */
+  .process-node--error {
+    background: rgba(239, 68, 68, 0.10);
+    color: #dc2626;
+  }
+
+  .process-node--error .process-node__postfix {
+    color: #dc2626;
+  }
+
+  /* Processing */
+  .process-node--processing {
+    background: rgba(59, 130, 246, 0.10);
+    color: #2563eb;
+  }
+
+  .process-node--processing .process-node__postfix {
+    color: #3b82f6;
+  }
+
+  .process-node--group {
+    font-weight: 600;
+  }
+
+  .process-node--item {
+    font-weight: 400;
+  }
+}

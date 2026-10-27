@@ -1,2 +1,65 @@
-/* You can add global styles to this file, and also import other style files */
-@use 'material-theme' as *;
+@use '@angular/material' as mat;
+@use 'angular-split/theme' as *;
+@use "@fortawesome/fontawesome-free/scss/fontawesome.scss";
+@use "@fortawesome/fontawesome-free/scss/regular.scss";
+@use "@fortawesome/fontawesome-free/scss/solid.scss";
+//@import "bootstrap/scss/bootstrap.scss";
+@import '@cluetec/ngcx-tree/styles/styles';
+
+html {
+  color-scheme: dark;
+  @include mat.theme((
+          color: (
+                  theme-type: dark,
+                  primary: mat.$violet-palette,
+          ),
+          typography: Roboto,
+          density: 0
+  ));
+
+  --mat-icon-button-container-shape: 0.5rem;
+  --mat-icon-button-state-layer-size: 2rem;
+  --mat-icon-button-icon-size: 2rem;
+  --mat-icon-button-touch-target-size: 2rem;
+
+}
+
+.as-split-gutter-icon {
+  display: none;
+}
+.as-split-gutter {
+  background-color: unset !important;
+}
+.as-vertical {
+  .as-split-gutter {
+    height: 10px;
+    z-index: 10;
+  }
+}
+
+html, body {
+  margin: 0;
+  display: block;
+}
+
+
+.mat-mdc-menu-panel {
+  display: contents;
+}
+
+.tree-node-content {
+  padding: 0.3rem;
+  color: var(--mat-sys-on-surface-variant);
+  border-radius: var(--mat-icon-button-container-shape);
+}
+
+.ngcx-tree:not(.dragging)
+.tree-node-content-container.is-selectable:hover
+.tree-node-content {
+  background-color: rgba(#fbfbfb, 0.2);
+}
+
+// ngx-tree
+.ngcx-tree .tree-node-content-container .chevron {
+  --icon-color: var(--mat-sys-on-surface-variant);
+}
